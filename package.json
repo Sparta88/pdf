@@ -1,0 +1,24 @@
+{
+  "name": "pdf-compila",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Compila moduli PDF offline su Android. Nessun dato registrato, nessun accesso a internet.",
+  "type": "module",
+  "scripts": {
+    "prebuild": "node scripts/copy-assets.js",
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/filesystem": "^6.0.2",
+    "@capacitor/share": "^6.0.3",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "3.11.174"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "vite": "^5.4.0"
+  }
+}

@@ -1,0 +1,64 @@
+name: Crea APK Android
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Scarica il codice
+        uses: actions/checkout@v4
+
+      - name: Installa Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installa Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Installa le dipendenze
+        run: npm ci
+
+      - name: Compila la web app
+        run: npm run build
+
+      - name: Crea il progetto Android
+        run: npx cap add android
+
+      - name: Togli INTERNET e backup dall'app
+        run: node scripts/patch-android.js
+
+      - name: Copia la web app nel progetto Android
+        run: npx cap sync android
+
+      - name: Compila l'APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Verifica che l'app NON abbia il permesso INTERNET
+        run: |
+          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          AAPT=$(ls "$ANDROID_HOME"/build-tools/*/aapt | sort -V | tail -1)
+          "$AAPT" dump permissions "$APK" | tee permessi.txt
+          if grep -q "android.permission.INTERNET" permessi.txt; then
+            echo "::error::L'APK contiene il permesso INTERNET: build annullata."
+            exit 1
+          fi
+          echo "OK: nessun permesso INTERNET."
+          cp "$APK" PDF-Compila.apk
+
+      - name: Salva l'APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF-Compila-apk
+          path: PDF-Compila.apk
+          retention-days: 30

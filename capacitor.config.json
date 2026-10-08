@@ -1,0 +1,8 @@
+{
+  "appId": "it.pdfcompila.app",
+  "appName": "PDF Compila",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

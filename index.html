@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="theme-color" content="#0f2a3d" />
+  <title>PDF Compila</title>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <strong>PDF Compila</strong>
+      <span id="fileName" class="file-name" hidden></span>
+    </div>
+    <div class="top-actions" id="topActions" hidden>
+      <button id="zoomOut" class="icon-btn" aria-label="Riduci zoom">−</button>
+      <button id="zoomIn" class="icon-btn" aria-label="Aumenta zoom">+</button>
+      <button id="closeDoc" class="text-btn">Chiudi</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="empty" class="empty">
+      <h1>Compila un modulo PDF</h1>
+      <p>Scegli un PDF dalla memoria del telefono, scrivi nei campi e salva una copia.</p>
+      <label class="primary big" for="filePicker">Apri PDF</label>
+      <p class="privacy">Nessun dato viene registrato dall'app. Quello che scrivi resta in memoria finché non chiudi il documento; viene scritto su disco solo quando tocchi Salva o Condividi.</p>
+    </section>
+    <section id="pages" class="pages" hidden></section>
+  </main>
+
+  <input id="filePicker" type="file" accept="application/pdf,.pdf" hidden />
+
+  <footer class="bar" id="bar" hidden>
+    <label class="switch">
+      <input type="checkbox" id="flatten" />
+      <span class="track" aria-hidden="true"></span>
+      <span class="switch-text">
+        <strong>Blocca il testo</strong>
+        <small id="flattenHint">Spento: il file resta modificabile</small>
+      </span>
+    </label>
+    <div class="bar-buttons">
+      <button id="saveBtn" class="primary">Salva</button>
+      <button id="shareBtn" class="secondary">Condividi</button>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <div id="busy" class="busy" hidden><div class="spinner"></div><span id="busyText">Attendere…</span></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
